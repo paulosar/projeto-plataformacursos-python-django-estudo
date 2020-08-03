@@ -1,0 +1,9 @@
+{% for enrollment in enrollments %}
+<li>
+    <a href="{% url 'courses:announcements' enrollment.course.slug %}">
+        {{ enrollment.course }}
+    </a>
+</li>
+{% empty %}
+<li>Nenhum curso encontrado.</li>
+{% endfor %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% load courses_tags %}
+
+{% block content %}
+<div class="pure-g-r content-ribbon">
+
+    <div class="pure-u-1">
+        <ul class="breadcrumb">
+            {% block breadcrumb %}
+            <a href="{% url 'accounts:dashboard' %}">Meu Painel</a>
+            {% endblock %}
+        </ul>
+    </div>
+
+    <div class="pure-u-1">
+        <p>Bem-vindo, {{user}}</p>
+    </div>
+
+    <div class="pure-u-1-3">
+        <div class="pure-menu pure-menu-open">
+            <a class="pure-menu-heading">Meus Cursos</a>
+            <ul>
+                {% block menu_options %}
+                    {% my_courses user %}
+                    <li class="pure-menu-heading">Minha Conta</li>
+                    <li><a href="{% url 'accounts:edit' %}">Editar Conta</a></li>
+                    <li><a href="{% url 'accounts:edit_password' %}">Editar Senha</a></li>
+                {% endblock %}
+            </ul>
+        </div>
+    </div>
+    <div class="pure-u-2-3">
+        <div class="inner">
+            {% block dashboard_content %}
+            <h2>Meus Cursos</h2>
+            {% for enrollment in enrollments %}
+            <div class="well">
+                <h3>{{enrollment.course}}</h3>
+                <h2>{{enrollment.course.start_date|date:'d/m/Y'|default:'Sem data'}}</h2>
+                {{ enrollment.course.description|linebreaks }}
+                <div class="pure-controls">
+                    <a href="{% url 'courses:announcements' enrollment.course.slug %}" class="pure-button pure-button-primary">Acessar</a>
+                    <a href="{% url 'courses:undo_enrollment' enrollment.course.slug    %}" class="pure-button pure-button-error">Cancelar</a>
+                </div>
+            </div>
+            {% empty %}
+            <aside class="pure-u-1"><p>Nenhum curso inscrito.</p></aside>
+            {% endfor %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}
